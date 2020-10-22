@@ -63,7 +63,7 @@ class _HomePageState extends State<HomePage> {
           ),
           Center(
             child: Container(
-              height: 400,
+              height: 450,
               child: Card(
                 color: Colors.white54,
                 margin: const EdgeInsets.all(8.0),
@@ -210,6 +210,23 @@ class _HomePageState extends State<HomePage> {
                                     'Use Google',
                                     style: TextStyle(color: Colors.white54),
                                   ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Already Have an account ?',
+                                style: TextStyle(fontSize: 14),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  FocusScope.of(context).unfocus();
+                                },
+                                child: Text(
+                                  'Sign Up',
                                 ),
                               ),
                             ],
