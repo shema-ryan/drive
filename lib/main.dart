@@ -35,6 +35,11 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   GlobalKey _form = GlobalKey<FormState>();
   GlobalKey _scaffold = GlobalKey<ScaffoldState>();
+  String userName = '';
+  String password = '';
+  int phoneNumber = 0;
+  String email = '';
+  bool _visibility = true;
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -58,7 +63,7 @@ class _HomePageState extends State<HomePage> {
           ),
           Center(
             child: Container(
-              height: 300,
+              height: 400,
               child: Card(
                 color: Colors.white54,
                 margin: const EdgeInsets.all(8.0),
@@ -66,13 +71,151 @@ class _HomePageState extends State<HomePage> {
                   padding: const EdgeInsets.all(8.0),
                   child: Form(
                     key: _form,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        TextFormField(),
-                        TextFormField(),
-                        TextFormField(),
-                      ],
+                    child: SingleChildScrollView(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          TextFormField(
+                            onSaved: (String username) {
+                              userName = username;
+                            },
+                            validator: (String username) {
+                              if (username.isEmpty || username.length < 4) {
+                                return 'characters  must be greater than 4';
+                              }
+                              return null;
+                            },
+                            decoration: InputDecoration(
+                              labelText: 'username',
+                              prefixIcon: Icon(Icons.person),
+                            ),
+                          ),
+                          TextFormField(
+                            keyboardType: TextInputType.emailAddress,
+                            onSaved: (String emailText) {
+                              email = emailText;
+                            },
+                            validator: (String emailText) {
+                              if (emailText.isEmpty ||
+                                  !emailText.contains('@')) {
+                                return 'please Enter a valid email';
+                              }
+                              return null;
+                            },
+                            decoration: InputDecoration(
+                              labelText: 'email',
+                              prefixIcon: Icon(Icons.mail),
+                            ),
+                          ),
+                          TextFormField(
+                            onSaved: (String phoneNumberText) {
+                              phoneNumber = int.parse(phoneNumberText);
+                            },
+                            validator: (String phoneNumberDigits) {
+                              if (!phoneNumberDigits.startsWith('+')) {
+                                return 'number must start with a country code ';
+                              }
+                              return null;
+                            },
+                            keyboardType:
+                                TextInputType.numberWithOptions(decimal: true),
+                            decoration: InputDecoration(
+                              labelText: 'phoneNumber',
+                              prefixIcon: Icon(Icons.phone),
+                            ),
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: TextFormField(
+                                  onSaved: (String passwordText) {
+                                    password = passwordText;
+                                  },
+                                  obscureText: _visibility,
+                                  validator: (String passwordText) {
+                                    if (passwordText.isEmpty ||
+                                        passwordText.length < 6) {
+                                      return 'password must be of 8 characters in length ';
+                                    }
+                                    return null;
+                                  },
+                                  decoration: InputDecoration(
+                                    labelText: 'password',
+                                    prefixIcon: Icon(Icons.vpn_key_sharp),
+                                  ),
+                                ),
+                              ),
+                              IconButton(
+                                icon: Icon(
+                                  _visibility
+                                      ? Icons.remove_red_eye_outlined
+                                      : Icons.remove_red_eye,
+                                  color: _visibility
+                                      ? Colors.brown
+                                      : Colors.black54,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    _visibility = !_visibility;
+                                  });
+                                },
+                              ),
+                            ],
+                          ),
+                          FlatButton(
+                              onPressed: () {},
+                              child: Text(
+                                'forgot password ?',
+                                style: TextStyle(color: Colors.black45),
+                              )),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  FocusScope.of(context).unfocus();
+                                },
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  margin: EdgeInsets.all(5),
+                                  height: size.height * 0.07,
+                                  width: size.width * 0.4,
+                                  decoration: BoxDecoration(
+                                      color: Colors.transparent,
+                                      borderRadius: BorderRadius.circular(5),
+                                      border: Border.all(
+                                          color: Colors.brown,
+                                          style: BorderStyle.solid)),
+                                  child: Text(
+                                    'SignUp',
+                                    style: TextStyle(color: Colors.brown),
+                                  ),
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {},
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  margin: EdgeInsets.all(5),
+                                  height: size.height * 0.07,
+                                  width: size.width * 0.4,
+                                  decoration: BoxDecoration(
+                                      color: Theme.of(context).primaryColor,
+                                      borderRadius: BorderRadius.circular(5),
+                                      border: Border.all(
+                                        color: Colors.white54,
+                                      )),
+                                  child: Text(
+                                    'Use Google',
+                                    style: TextStyle(color: Colors.white54),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
