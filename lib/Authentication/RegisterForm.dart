@@ -25,8 +25,10 @@ class _HomePageState extends State<HomePage>
   AnimationController _fade;
   Animation<double> _animation;
   //helper functions
-  Future<void> _registration({bool login, String}) async {
-    if (_chx) {}
+  Future<void> _registration({bool login, String name, String password}) async {
+    if (_chx) {
+    
+    }
   }
 
   @override
@@ -36,7 +38,7 @@ class _HomePageState extends State<HomePage>
       vsync: this,
       duration: const Duration(seconds: 1),
     );
-    _animation = Tween<double>(begin: 1.0, end: 0.0)
+    _animation = Tween<double>(begin: 0.0, end: 1.0)
         .animate(CurvedAnimation(parent: _fade, curve: Curves.easeInOut));
   }
 
