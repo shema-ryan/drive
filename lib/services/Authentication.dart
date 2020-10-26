@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 
 class Authentication {
   static Future<void> signUp(
@@ -9,7 +10,7 @@ class Authentication {
       String password}) async {
     final _auth = FirebaseAuth.instance;
     try {
-      print(email + password);
+      print('the phoneNumber is' + phoneNumber);
       await _auth
           .createUserWithEmailAndPassword(email: email, password: password)
           .then((value) {

@@ -19,6 +19,7 @@ class _HomePageState extends State<HomePage>
   String phoneNumber = '';
   String captureCode = '';
   String email = '';
+  bool loading = false;
   bool _visibility = true;
   bool _signState = false;
   bool _chx = false;
@@ -36,6 +37,14 @@ class _HomePageState extends State<HomePage>
       _formKey.currentState.save();
       if (login == false) {
         Authentication.singIn(email: email, password: password).catchError((e) {
+          String message = '';
+          if (e.toString().contains('The password is invalid')) {
+            message = 'provide a valid password !';
+          } else if (e.toString().contains('may have been deleted.')) {
+            message = 'No account detected consider creating one ';
+          } else {
+            message = 'hello';
+          }
           _scaffold.currentState.showSnackBar(SnackBar(
             backgroundColor: Theme.of(context).errorColor,
             content: Text(e),
@@ -49,7 +58,12 @@ class _HomePageState extends State<HomePage>
             email: email,
             username: name,
             phoneNumber: telephone,
-          );
+          ).catchError((e) {
+            _scaffold.currentState.showSnackBar(SnackBar(
+              backgroundColor: Theme.of(context).errorColor,
+              content: Text(e),
+            ));
+          });
         } else {
           _scaffold.currentState.showSnackBar(SnackBar(
             backgroundColor: Theme.of(context).errorColor,
@@ -269,15 +283,20 @@ class _HomePageState extends State<HomePage>
                                 ),
                               ],
                             ),
-                            FlatButton(
-                                onPressed: () {
-                                  Navigator.of(context)
-                                      .pushNamed(ForgetPassword.routeName);
-                                },
-                                child: Text(
-                                  'forgot password ?',
-                                  style: TextStyle(color: Colors.black45),
-                                )),
+                            if (!_signState)
+                              FlatButton(
+                                  onPressed: () {
+                                    Navigator.of(context)
+                                        .pushNamed(ForgetPassword.routeName);
+                                  },
+                                  child: Text(
+                                    'forgot password ?',
+                                    style: TextStyle(color: Colors.black45),
+                                  )),
+                            if (_signState)
+                              SizedBox(
+                                height: 20,
+                              ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -291,7 +310,6 @@ class _HomePageState extends State<HomePage>
                                       name: userName,
                                       telephone: phoneNumber,
                                     );
-                                    phoneNumber = '';
                                   },
                                   child: Container(
                                     alignment: Alignment.center,
