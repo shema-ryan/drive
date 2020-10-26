@@ -9,10 +9,17 @@ class Authentication {
       String password}) async {
     final _auth = FirebaseAuth.instance;
     try {
-      _auth
+      print(email + password);
+      await _auth
           .createUserWithEmailAndPassword(email: email, password: password)
           .then((value) {
         value.user.sendEmailVerification();
+        FirebaseFirestore.instance.collection('Users').doc(value.user.uid).set({
+          'uid': value.user.uid,
+          'username': username,
+          'email': email,
+          'phoneNumber': phoneNumber,
+        });
       });
     } on FirebaseException catch (e) {
       var message = e.message;
@@ -27,7 +34,8 @@ class Authentication {
       _user = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
     } on FirebaseException catch (e) {
-      print(e.message);
+      print(e);
+      throw e.message;
     }
     return _user;
   }

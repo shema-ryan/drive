@@ -12,11 +12,12 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
   // Interface - variables .
-  final GlobalKey _form = GlobalKey<FormState>();
-  final GlobalKey _scaffold = GlobalKey<ScaffoldState>();
+  final _formKey = GlobalKey<FormState>();
+  final _scaffold = GlobalKey<ScaffoldState>();
   String userName = '';
   String password = '';
   String phoneNumber = '';
+  String captureCode = '';
   String email = '';
   bool _visibility = true;
   bool _signState = false;
@@ -25,9 +26,43 @@ class _HomePageState extends State<HomePage>
   AnimationController _fade;
   Animation<double> _animation;
   //helper functions
-  Future<void> _registration({bool login, String name, String password}) async {
-    if (_chx) {
-    
+  Future<void> _signOrSignUp(
+      {bool login,
+      String name,
+      String password,
+      String email,
+      String telephone}) async {
+    if (_formKey.currentState.validate()) {
+      _formKey.currentState.save();
+      if (login == false) {
+        Authentication.singIn(email: email, password: password).catchError((e) {
+          _scaffold.currentState.showSnackBar(SnackBar(
+            backgroundColor: Theme.of(context).errorColor,
+            content: Text(e),
+          ));
+        });
+      } else {
+        if (_chx) {
+          print(phoneNumber);
+          Authentication.signUp(
+            password: password,
+            email: email,
+            username: name,
+            phoneNumber: telephone,
+          );
+        } else {
+          _scaffold.currentState.showSnackBar(SnackBar(
+            backgroundColor: Theme.of(context).errorColor,
+            content: Text('please accept terms and conditions'),
+            action: SnackBarAction(
+              label: 'Ok',
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ));
+        }
+      }
     }
   }
 
@@ -54,7 +89,7 @@ class _HomePageState extends State<HomePage>
     return Scaffold(
       key: _scaffold,
       body: Form(
-        key: _form,
+        key: _formKey,
         child: Stack(
           children: [
             Container(
@@ -165,24 +200,22 @@ class _HomePageState extends State<HomePage>
                                     CountryCodePicker(
                                       initialSelection: 'UG',
                                       onInit: (CountryCode countryCode) {
-                                        phoneNumber =
-                                            countryCode.toCountryStringOnly();
+                                        captureCode = countryCode.dialCode;
                                       },
                                       onChanged: (CountryCode countryCode) {
-                                        phoneNumber =
-                                            countryCode.toCountryStringOnly();
+                                        captureCode = countryCode.dialCode;
                                       },
                                     ),
                                     Expanded(
                                       child: TextFormField(
                                         key: ValueKey('phoneNumber'),
                                         onSaved: (String phoneNumberText) {
-                                          phoneNumber += phoneNumberText;
+                                          phoneNumber =
+                                              captureCode + phoneNumberText;
                                         },
                                         validator: (String phoneNumberDigits) {
-                                          if (!phoneNumberDigits
-                                              .startsWith('+')) {
-                                            return 'number must start with a country code ';
+                                          if (phoneNumberDigits.length < 6) {
+                                            return 'Incorrect phoneNumber ';
                                           }
                                           return null;
                                         },
@@ -251,6 +284,14 @@ class _HomePageState extends State<HomePage>
                                 GestureDetector(
                                   onTap: () {
                                     FocusScope.of(context).unfocus();
+                                    _signOrSignUp(
+                                      email: email,
+                                      password: password,
+                                      login: _signState,
+                                      name: userName,
+                                      telephone: phoneNumber,
+                                    );
+                                    phoneNumber = '';
                                   },
                                   child: Container(
                                     alignment: Alignment.center,
