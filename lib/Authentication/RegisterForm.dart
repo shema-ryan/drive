@@ -5,6 +5,7 @@ import './ForgotPassword.dart';
 import 'package:drive/services/services.dart';
 
 class HomePage extends StatefulWidget {
+  static const String routeName = '/HomePage';
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -27,27 +28,27 @@ class _HomePageState extends State<HomePage>
   AnimationController _fade;
   Animation<double> _animation;
   //helper functions
-  Future<void> _signOrSignUp(
+  void _signOrSignUp(
       {bool login,
       String name,
       String password,
       String email,
-      String telephone}) async {
+      String telephone}) {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
       if (login == false) {
         Authentication.singIn(email: email, password: password).catchError((e) {
           String message = '';
-          if (e.toString().contains('The password is invalid')) {
+          if (e.contains('The password is invalid')) {
             message = 'provide a valid password !';
-          } else if (e.toString().contains('may have been deleted.')) {
+          } else if (e.contains('may have been deleted.')) {
             message = 'No account detected consider creating one ';
           } else {
-            message = 'hello';
+            message = e;
           }
           _scaffold.currentState.showSnackBar(SnackBar(
             backgroundColor: Theme.of(context).errorColor,
-            content: Text(e),
+            content: Text(message),
           ));
         });
       } else {
@@ -58,7 +59,22 @@ class _HomePageState extends State<HomePage>
             email: email,
             username: name,
             phoneNumber: telephone,
-          ).catchError((e) {
+          ).then((value) {
+            showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                content: Text('a message was sent to your mail please verify '),
+                actions: [
+                  FlatButton(
+                    child: Text('okay'),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  )
+                ],
+              ),
+            );
+          }).catchError((e) {
             _scaffold.currentState.showSnackBar(SnackBar(
               backgroundColor: Theme.of(context).errorColor,
               content: Text(e),
@@ -168,8 +184,8 @@ class _HomePageState extends State<HomePage>
                                 opacity: _animation,
                                 child: TextFormField(
                                   key: ValueKey('userName'),
-                                  onSaved: (String username) {
-                                    userName = username;
+                                  onSaved: (value) {
+                                    userName = value;
                                   },
                                   validator: (String username) {
                                     if (username.isEmpty ||
@@ -187,8 +203,8 @@ class _HomePageState extends State<HomePage>
                             TextFormField(
                               key: ValueKey('email'),
                               keyboardType: TextInputType.emailAddress,
-                              onSaved: (String emailText) {
-                                email = emailText;
+                              onSaved: (value) {
+                                email = value;
                               },
                               validator: (String emailText) {
                                 if (emailText.isEmpty ||
@@ -223,9 +239,8 @@ class _HomePageState extends State<HomePage>
                                     Expanded(
                                       child: TextFormField(
                                         key: ValueKey('phoneNumber'),
-                                        onSaved: (String phoneNumberText) {
-                                          phoneNumber =
-                                              captureCode + phoneNumberText;
+                                        onSaved: (value) {
+                                          phoneNumber = captureCode + value;
                                         },
                                         validator: (String phoneNumberDigits) {
                                           if (phoneNumberDigits.length < 6) {
@@ -248,8 +263,8 @@ class _HomePageState extends State<HomePage>
                               children: [
                                 Expanded(
                                   child: TextFormField(
-                                    onSaved: (String passwordText) {
-                                      password = passwordText;
+                                    onSaved: (value) {
+                                      password = value;
                                     },
                                     obscureText: _visibility,
                                     validator: (String passwordText) {
@@ -301,7 +316,7 @@ class _HomePageState extends State<HomePage>
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 GestureDetector(
-                                  onTap: () {
+                                  onTap: () async {
                                     FocusScope.of(context).unfocus();
                                     _signOrSignUp(
                                       email: email,
@@ -329,7 +344,7 @@ class _HomePageState extends State<HomePage>
                                   ),
                                 ),
                                 GestureDetector(
-                                  onTap: () {},
+                                  onTap: () async {},
                                   child: Container(
                                     alignment: Alignment.center,
                                     margin: EdgeInsets.all(5),

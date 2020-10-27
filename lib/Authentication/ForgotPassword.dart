@@ -86,10 +86,11 @@ class ForgetPassword extends StatelessWidget {
                                       ),
                                       actions: [
                                         FlatButton(
-                                          onPressed: () {
+                                          onPressed: () async {
                                             FocusScope.of(context).unfocus();
-                                            Authentication.resetPassword(
+                                            await Authentication.resetPassword(
                                                 email: email);
+                                            Navigator.of(context).pop();
                                           },
                                           child: Text('okay'),
                                         )
