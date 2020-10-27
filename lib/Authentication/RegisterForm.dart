@@ -47,7 +47,7 @@ class _HomePageState extends State<HomePage>
           });
           String message = '';
           if (e.contains('The password is invalid')) {
-            message = 'provide a valid password !';
+            message = 'the password is incorrect';
           } else if (e.contains('may have been deleted.')) {
             message = 'No account detected consider creating one ';
           } else {
