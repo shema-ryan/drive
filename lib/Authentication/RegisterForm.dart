@@ -20,6 +20,7 @@ class _HomePageState extends State<HomePage>
   String phoneNumber = '';
   String captureCode = '';
   String email = '';
+  bool _loadingSpinner = false;
   bool loading = false;
   bool _visibility = true;
   bool _signState = false;
@@ -34,10 +35,16 @@ class _HomePageState extends State<HomePage>
       String password,
       String email,
       String telephone}) {
+    _formKey.currentState.save();
     if (_formKey.currentState.validate()) {
-      _formKey.currentState.save();
       if (login == false) {
+        setState(() {
+          _loadingSpinner = true;
+        });
         Authentication.singIn(email: email, password: password).catchError((e) {
+          setState(() {
+            _loadingSpinner = false;
+          });
           String message = '';
           if (e.contains('The password is invalid')) {
             message = 'provide a valid password !';
@@ -53,7 +60,9 @@ class _HomePageState extends State<HomePage>
         });
       } else {
         if (_chx) {
-          print(phoneNumber);
+          setState(() {
+            _loadingSpinner = true;
+          });
           Authentication.signUp(
             password: password,
             email: email,
@@ -75,6 +84,9 @@ class _HomePageState extends State<HomePage>
               ),
             );
           }).catchError((e) {
+            setState(() {
+              _loadingSpinner = false;
+            });
             _scaffold.currentState.showSnackBar(SnackBar(
               backgroundColor: Theme.of(context).errorColor,
               content: Text(e),
@@ -312,58 +324,69 @@ class _HomePageState extends State<HomePage>
                               SizedBox(
                                 height: 20,
                               ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                GestureDetector(
-                                  onTap: () async {
-                                    FocusScope.of(context).unfocus();
-                                    _signOrSignUp(
-                                      email: email,
-                                      password: password,
-                                      login: _signState,
-                                      name: userName,
-                                      telephone: phoneNumber,
-                                    );
-                                  },
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    margin: EdgeInsets.all(5),
-                                    height: size.height * 0.07,
-                                    width: size.width * 0.4,
-                                    decoration: BoxDecoration(
-                                        color: Colors.transparent,
-                                        borderRadius: BorderRadius.circular(5),
-                                        border: Border.all(
-                                            color: Colors.brown,
-                                            style: BorderStyle.solid)),
-                                    child: Text(
-                                      !_signState ? 'LogIn' : 'SignUp',
-                                      style: TextStyle(color: Colors.brown),
-                                    ),
+                            _loadingSpinner
+                                ? Center(
+                                    child: CircularProgressIndicator(),
+                                  )
+                                : Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () {
+                                          _formKey.currentState.save();
+                                          _signOrSignUp(
+                                            email: email,
+                                            password: password,
+                                            login: _signState,
+                                            name: userName,
+                                            telephone: phoneNumber,
+                                          );
+                                          FocusScope.of(context).unfocus();
+                                        },
+                                        child: Container(
+                                          alignment: Alignment.center,
+                                          margin: EdgeInsets.all(5),
+                                          height: size.height * 0.07,
+                                          width: size.width * 0.4,
+                                          decoration: BoxDecoration(
+                                              color: Colors.transparent,
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                              border: Border.all(
+                                                  color: Colors.brown,
+                                                  style: BorderStyle.solid)),
+                                          child: Text(
+                                            !_signState ? 'LogIn' : 'SignUp',
+                                            style:
+                                                TextStyle(color: Colors.brown),
+                                          ),
+                                        ),
+                                      ),
+                                      GestureDetector(
+                                        onTap: () async {},
+                                        child: Container(
+                                          alignment: Alignment.center,
+                                          margin: EdgeInsets.all(5),
+                                          height: size.height * 0.07,
+                                          width: size.width * 0.4,
+                                          decoration: BoxDecoration(
+                                              color: Theme.of(context)
+                                                  .primaryColor,
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                              border: Border.all(
+                                                color: Colors.white54,
+                                              )),
+                                          child: Text(
+                                            'Use Google',
+                                            style: TextStyle(
+                                                color: Colors.white54),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ),
-                                GestureDetector(
-                                  onTap: () async {},
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    margin: EdgeInsets.all(5),
-                                    height: size.height * 0.07,
-                                    width: size.width * 0.4,
-                                    decoration: BoxDecoration(
-                                        color: Theme.of(context).primaryColor,
-                                        borderRadius: BorderRadius.circular(5),
-                                        border: Border.all(
-                                          color: Colors.white54,
-                                        )),
-                                    child: Text(
-                                      'Use Google',
-                                      style: TextStyle(color: Colors.white54),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
                             if (_signState)
                               FadeTransition(
                                 opacity: _animation,
