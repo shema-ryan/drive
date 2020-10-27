@@ -50,6 +50,8 @@ class _HomePageState extends State<HomePage>
             message = 'the password is incorrect';
           } else if (e.contains('may have been deleted.')) {
             message = 'No account detected consider creating one ';
+          } else if (e.contains('A network error')) {
+            message = 'Check the internet connection';
           } else {
             message = e;
           }
@@ -406,32 +408,33 @@ class _HomePageState extends State<HomePage>
                                   ],
                                 ),
                               ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  !_signState
-                                      ? 'Create an account ?'
-                                      : 'Already Have an account ?',
-                                  style: TextStyle(fontSize: 14),
-                                ),
-                                TextButton(
-                                  onPressed: () {
-                                    FocusScope.of(context).unfocus();
-                                    setState(() {
-                                      _signState = !_signState;
-                                    });
-                                    _fade.forward();
-                                    if (_signState == false) {
-                                      _fade.reverse();
-                                    }
-                                  },
-                                  child: Text(
-                                    _signState ? 'Sign In' : 'Sign Up',
+                            if (!_loadingSpinner)
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    !_signState
+                                        ? 'Create an account ?'
+                                        : 'Already Have an account ?',
+                                    style: TextStyle(fontSize: 14),
                                   ),
-                                ),
-                              ],
-                            ),
+                                  TextButton(
+                                    onPressed: () {
+                                      FocusScope.of(context).unfocus();
+                                      setState(() {
+                                        _signState = !_signState;
+                                      });
+                                      _fade.forward();
+                                      if (_signState == false) {
+                                        _fade.reverse();
+                                      }
+                                    },
+                                    child: Text(
+                                      _signState ? 'Sign In' : 'Sign Up',
+                                    ),
+                                  ),
+                                ],
+                              ),
                           ],
                         ),
                       ),
