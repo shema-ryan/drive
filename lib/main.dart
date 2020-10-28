@@ -1,3 +1,4 @@
+import 'package:drive/Screens/Available.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -44,6 +45,8 @@ class MyApp extends StatelessWidget {
       routes: {
         ForgetPassword.routeName: (BuildContext context) => ForgetPassword(),
         HomePage.routeName: (BuildContext context) => HomePage(),
+        StartPage.routeName: (BuildContext context) => StartPage(),
+        AvailableCars.routeName: (BuildContext context) => AvailableCars(),
       },
     );
   }

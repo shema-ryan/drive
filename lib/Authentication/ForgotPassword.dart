@@ -66,7 +66,7 @@ class ForgetPassword extends StatelessWidget {
                             fillColor: Colors.grey.withOpacity(0.4)),
                       ),
                       SizedBox(
-                        height: 30,
+                        height: size.height * 0.04,
                       ),
                       GestureDetector(
                         onTap: () {

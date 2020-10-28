@@ -152,8 +152,8 @@ class _HomePageState extends State<HomePage>
             ),
             ListView(
               children: [
-                const SizedBox(
-                  height: 100,
+                SizedBox(
+                  height: size.height * 0.13,
                 ),
                 Center(
                   child: RichText(
@@ -178,11 +178,11 @@ class _HomePageState extends State<HomePage>
                   ),
                 ),
                 SizedBox(
-                  height: 100,
+                  height: size.height * 0.13,
                 ),
                 AnimatedContainer(
                   duration: Duration(seconds: 1),
-                  height: _signState ? 470 : 300,
+                  height: _signState ? size.height * 0.62 : size.height * 0.4,
                   child: Card(
                     color: Colors.white54,
                     margin: const EdgeInsets.all(8.0),
@@ -324,7 +324,7 @@ class _HomePageState extends State<HomePage>
                                   )),
                             if (_signState)
                               SizedBox(
-                                height: 20,
+                                height: size.height * 0.03,
                               ),
                             _loadingSpinner
                                 ? Center(
