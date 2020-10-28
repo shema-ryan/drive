@@ -6,6 +6,7 @@ class AvailableCars extends StatelessWidget {
   static const String routeName = '/Available';
   @override
   Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Theme.of(context).accentColor,
       appBar: AppBar(
@@ -61,7 +62,7 @@ class AvailableCars extends StatelessWidget {
                         ],
                       ),
                       SizedBox(
-                        height: 50,
+                        height: size.height * 0.066,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -124,7 +125,7 @@ class AvailableCars extends StatelessWidget {
                 top: -5,
                 child: Image.asset(
                   Data.getCarList[index].images[0],
-                  height: 100,
+                  height: size.height * 0.13,
                   fit: BoxFit.contain,
                 ),
               ),

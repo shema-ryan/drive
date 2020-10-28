@@ -1,4 +1,5 @@
 import 'package:drive/Screens/Available.dart';
+import 'package:drive/Screens/DetailsCar.dart';
 import 'package:drive/services/Authentication.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -118,9 +119,18 @@ class _StartPageState extends State<StartPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Image.asset(
-                          Data.getCarList[index].images[0],
-                          height: size.height * 0.21,
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).pushNamed(
+                                DetailsScreen.routeName,
+                                arguments: <String, Car>{
+                                  'selected': Data.getCarList[index]
+                                });
+                          },
+                          child: Image.asset(
+                            Data.getCarList[index].images[0],
+                            height: size.height * 0.21,
+                          ),
                         ),
                         SizedBox(
                           height: size.height * 0.013,
