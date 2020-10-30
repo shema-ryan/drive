@@ -45,7 +45,7 @@ class _StartPageState extends State<StartPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0),
-        child: Column(
+        child: ListView(
           children: [
             Container(
               margin: EdgeInsets.symmetric(horizontal: 8.0),
@@ -127,9 +127,12 @@ class _StartPageState extends State<StartPage> {
                                   'selected': Data.getCarList[index]
                                 });
                           },
-                          child: Image.asset(
-                            Data.getCarList[index].images[0],
-                            height: size.height * 0.21,
+                          child: Hero(
+                            tag: Data.getCarList[index].model,
+                            child: Image.asset(
+                              Data.getCarList[index].images[0],
+                              height: size.height * 0.21,
+                            ),
                           ),
                         ),
                         SizedBox(
@@ -293,10 +296,12 @@ class _StartPageState extends State<StartPage> {
         type: BottomNavigationBarType.fixed,
         selectedIconTheme: IconThemeData(size: 35),
         showSelectedLabels: false,
-        selectedLabelStyle: GoogleFonts.lato(),
-        unselectedLabelStyle: GoogleFonts.lato(),
+        unselectedLabelStyle: GoogleFonts.aBeeZee().copyWith(fontSize: 15),
         items: [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
           BottomNavigationBarItem(
               icon: Icon(Icons.calendar_today), label: 'recent'),
           BottomNavigationBarItem(

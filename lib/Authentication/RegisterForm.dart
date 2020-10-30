@@ -145,9 +145,7 @@ class _HomePageState extends State<HomePage>
                       image: NetworkImage(
                           'https://www.turbinebd.com/wp-content/uploads/2020/01/ooo-1.jpg'))),
               child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor.withOpacity(0.7),
-                ),
+                decoration: BoxDecoration(color: Colors.brown.withOpacity(0.7)),
               ),
             ),
             ListView(
@@ -301,7 +299,7 @@ class _HomePageState extends State<HomePage>
                                         ? Icons.remove_red_eye_outlined
                                         : Icons.remove_red_eye,
                                     color: _visibility
-                                        ? Colors.brown
+                                        ? Theme.of(context).primaryColor
                                         : Colors.black54,
                                   ),
                                   onPressed: () {
@@ -360,8 +358,10 @@ class _HomePageState extends State<HomePage>
                                                   style: BorderStyle.solid)),
                                           child: Text(
                                             !_signState ? 'LogIn' : 'SignUp',
-                                            style:
-                                                TextStyle(color: Colors.brown),
+                                            style: TextStyle(
+                                                color: Colors.brown,
+                                                fontSize: 17,
+                                                fontWeight: FontWeight.bold),
                                           ),
                                         ),
                                       ),
@@ -383,7 +383,9 @@ class _HomePageState extends State<HomePage>
                                           child: Text(
                                             'Use Google',
                                             style: TextStyle(
-                                                color: Colors.white54),
+                                              color: Colors.white70,
+                                              fontSize: 17,
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -404,7 +406,12 @@ class _HomePageState extends State<HomePage>
                                       value: _chx,
                                       checkColor: Colors.brown,
                                     ),
-                                    Text('i agree to Terms and conditions ')
+                                    Text(
+                                      'i agree to Terms and conditions ',
+                                      style: GoogleFonts.aBeeZee().copyWith(
+                                        fontSize: 17,
+                                      ),
+                                    )
                                   ],
                                 ),
                               ),
@@ -416,7 +423,7 @@ class _HomePageState extends State<HomePage>
                                     !_signState
                                         ? 'Create an account ?'
                                         : 'Already Have an account ?',
-                                    style: TextStyle(fontSize: 14),
+                                    style: TextStyle(fontSize: 17),
                                   ),
                                   TextButton(
                                     onPressed: () {
@@ -431,6 +438,7 @@ class _HomePageState extends State<HomePage>
                                     },
                                     child: Text(
                                       _signState ? 'Sign In' : 'Sign Up',
+                                      style: TextStyle(fontSize: 17),
                                     ),
                                   ),
                                 ],

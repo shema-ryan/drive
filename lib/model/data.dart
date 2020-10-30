@@ -5,7 +5,9 @@ class Car {
   String condition;
   List<String> images;
   String fuelConsumption;
-
+  String color;
+  String gearBox;
+  int seat;
   Car({
     this.brand,
     this.model,
@@ -13,6 +15,9 @@ class Car {
     this.condition,
     this.images,
     this.fuelConsumption,
+    this.color,
+    this.gearBox,
+    this.seat,
   });
 }
 
@@ -37,6 +42,9 @@ class Data {
         "assets/images/land_rover_1.png",
         "assets/images/land_rover_2.png",
       ],
+      color: 'Blue',
+      gearBox: 'Automatic',
+      seat: 4,
     ),
     Car(
       brand: "Alfa Romeo",
@@ -47,6 +55,9 @@ class Data {
         "assets/images/alfa_romeo_c4_0.png",
       ],
       fuelConsumption: '3.6l',
+      color: 'Black',
+      gearBox: 'Manual',
+      seat: 4,
     ),
     Car(
       brand: "Nissan",
@@ -60,6 +71,9 @@ class Data {
         "assets/images/nissan_gtr_3.png",
       ],
       fuelConsumption: '4.2l',
+      color: 'pale Blue',
+      gearBox: 'Automatic',
+      seat: 4,
     ),
     Car(
       brand: "Acura",
@@ -72,18 +86,25 @@ class Data {
         "assets/images/acura_2.png",
       ],
       fuelConsumption: '3.5l',
+      color: 'Blue',
+      gearBox: 'Manual',
+      seat: 2,
     ),
     Car(
-        brand: "Chevrolet",
-        model: "Camaro",
-        price: 3400,
-        condition: "Weekly",
-        images: [
-          "assets/images/camaro_0.png",
-          "assets/images/camaro_1.png",
-          "assets/images/camaro_2.png",
-        ],
-        fuelConsumption: '5.02l'),
+      brand: "Chevrolet",
+      model: "Camaro",
+      price: 3400,
+      condition: "Weekly",
+      images: [
+        "assets/images/camaro_0.png",
+        "assets/images/camaro_1.png",
+        "assets/images/camaro_2.png",
+      ],
+      fuelConsumption: '5.02l',
+      color: 'Navy Blue',
+      gearBox: 'Automatic',
+      seat: 4,
+    ),
     Car(
       brand: "Ferrari",
       model: "Spider 488",
@@ -97,6 +118,9 @@ class Data {
         "assets/images/ferrari_spider_488_4.png",
       ],
       fuelConsumption: '6.5l',
+      color: 'Blue',
+      gearBox: 'Automatic',
+      seat: 4,
     ),
     Car(
       brand: "Ford",
@@ -108,6 +132,9 @@ class Data {
         "assets/images/ford_1.png",
       ],
       fuelConsumption: '5.2l',
+      color: 'grey',
+      gearBox: 'Automatic',
+      seat: 4,
     ),
     Car(
       brand: "Fiat",
@@ -119,6 +146,9 @@ class Data {
         "assets/images/fiat_1.png",
       ],
       fuelConsumption: '4.9l',
+      color: 'Blue',
+      gearBox: 'Automatic',
+      seat: 4,
     ),
     Car(
       brand: "Honda",
@@ -129,6 +159,9 @@ class Data {
         "assets/images/honda_0.png",
       ],
       fuelConsumption: '3.2l',
+      color: 'Blue',
+      gearBox: 'Automatic',
+      seat: 4,
     ),
     Car(
       brand: "Citroen",
@@ -141,6 +174,9 @@ class Data {
         "assets/images/citroen_2.png",
       ],
       fuelConsumption: '2.5l',
+      color: 'deepOrange',
+      gearBox: 'Automatic',
+      seat: 4,
     ),
   ];
   static List<Dealer> getDealerList = [
