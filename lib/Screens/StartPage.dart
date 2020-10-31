@@ -309,6 +309,7 @@ class _StartPageState extends State<StartPage> {
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
       ),
+      drawer: user.email == 'kamanzishema@gmail.com' ? Drawer() : null,
     );
   }
 }
