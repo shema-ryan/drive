@@ -4,6 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'BookPage.dart';
+
 class DetailsScreen extends StatefulWidget {
   static const String routeName = '/DetailsScreen';
 
@@ -50,7 +52,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
         title: Text(
           _selectedCar.brand,
           style: GoogleFonts.aBeeZee()
-              .copyWith(fontSize: 25, color: Color(0xFF71482A)),
+              .copyWith(fontSize: 20, color: Color(0xFF71482A)),
         ),
       ),
       body: ListView(
@@ -100,7 +102,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   images: _selectedCar.images,
                   handler: (ind, imageUrl) {
                     return Container(
-                      margin: EdgeInsets.symmetric(vertical: 10, horizontal: 2),
+                      margin: EdgeInsets.symmetric(vertical: 5, horizontal: 2),
                       height: 5,
                       width: _current == ind ? 20 : 10,
                       decoration: BoxDecoration(
@@ -110,18 +112,30 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     );
                   })),
           SizedBox(
-            height: size.height * 0.025,
+            height: size.height * 0.01,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              _buildCard(size.height * 0.14, size.height * 0.15, '12 months',
-                  '4350', 0),
-              _buildCard(size.height * 0.14, size.height * 0.15, '6 months',
-                  '4800', 1),
-              _buildCard(
-                  size.height * 0.14, size.height * 0.15, '1 month', '5100', 2),
-            ],
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8.0),
+            child: Text(
+              'Subscription',
+              style: GoogleFonts.aBeeZee().copyWith(fontSize: 19),
+            ),
+          ),
+          SizedBox(
+            height: size.height * 0.01,
+          ),
+          SingleChildScrollView(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                _buildCard(size.height * 0.14, size.height * 0.15, '12 months',
+                    '4350', 0),
+                _buildCard(size.height * 0.14, size.height * 0.15, '6 months',
+                    '4800', 1),
+                _buildCard(size.height * 0.14, size.height * 0.15, '1 month',
+                    '5100', 2),
+              ],
+            ),
           ),
           SizedBox(
             height: size.height * 0.013,
@@ -185,7 +199,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
               ),
               GestureDetector(
                 onTap: () {
-                  print('Thanks SHema');
+                  Navigator.of(context).pushNamed(BookPage.routeName);
                 },
                 child: Container(
                   alignment: Alignment.center,

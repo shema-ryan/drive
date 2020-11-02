@@ -48,6 +48,7 @@ class MyApp extends StatelessWidget {
         StartPage.routeName: (BuildContext context) => StartPage(),
         AvailableCars.routeName: (BuildContext context) => AvailableCars(),
         DetailsScreen.routeName: (BuildContext context) => DetailsScreen(),
+        BookPage.routeName: (BuildContext context) => BookPage(),
       },
     );
   }

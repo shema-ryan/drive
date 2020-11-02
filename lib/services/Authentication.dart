@@ -9,8 +9,6 @@ class Authentication {
       String password}) async {
     final _auth = FirebaseAuth.instance;
     try {
-      print(email);
-      print(password);
       await _auth
           .createUserWithEmailAndPassword(email: email, password: password)
           .then((value) {

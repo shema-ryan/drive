@@ -360,7 +360,7 @@ class _HomePageState extends State<HomePage>
                                             !_signState ? 'LogIn' : 'SignUp',
                                             style: TextStyle(
                                                 color: Colors.brown,
-                                                fontSize: 17,
+                                                fontSize: 15,
                                                 fontWeight: FontWeight.bold),
                                           ),
                                         ),
@@ -384,7 +384,7 @@ class _HomePageState extends State<HomePage>
                                             'Use Google',
                                             style: TextStyle(
                                               color: Colors.white70,
-                                              fontSize: 17,
+                                              fontSize: 15,
                                             ),
                                           ),
                                         ),
@@ -409,7 +409,7 @@ class _HomePageState extends State<HomePage>
                                     Text(
                                       'i agree to Terms and conditions ',
                                       style: GoogleFonts.aBeeZee().copyWith(
-                                        fontSize: 17,
+                                        fontSize: 15,
                                       ),
                                     )
                                   ],
@@ -423,7 +423,7 @@ class _HomePageState extends State<HomePage>
                                     !_signState
                                         ? 'Create an account ?'
                                         : 'Already Have an account ?',
-                                    style: TextStyle(fontSize: 17),
+                                    style: TextStyle(fontSize: 14),
                                   ),
                                   TextButton(
                                     onPressed: () {
@@ -438,7 +438,7 @@ class _HomePageState extends State<HomePage>
                                     },
                                     child: Text(
                                       _signState ? 'Sign In' : 'Sign Up',
-                                      style: TextStyle(fontSize: 17),
+                                      style: TextStyle(fontSize: 14),
                                     ),
                                   ),
                                 ],
