@@ -7,8 +7,6 @@ import 'package:google_fonts/google_fonts.dart';
 import '../model/model.dart';
 import 'package:flutter/services.dart';
 
-import 'BookPage.dart';
-
 class StartPage extends StatefulWidget {
   static const String routeName = '/startPage';
   @override
@@ -27,8 +25,7 @@ class _StartPageState extends State<StartPage> {
         actions: [
           IconButton(
             onPressed: () {
-              // Authentication.signOut();
-              Navigator.of(context).pushNamed(BookPage.routeName);
+              Authentication.signOut();
             },
             icon: Icon(
               Icons.settings,

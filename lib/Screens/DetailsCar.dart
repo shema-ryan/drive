@@ -199,7 +199,11 @@ class _DetailsScreenState extends State<DetailsScreen> {
               ),
               GestureDetector(
                 onTap: () {
-                  Navigator.of(context).pushNamed(BookPage.routeName);
+                  Navigator.of(context).pushNamed(BookPage.routeName,
+                      arguments: <String, dynamic>{
+                        'selected': _selectedCar,
+                        'price': _price,
+                      });
                 },
                 child: Container(
                   alignment: Alignment.center,
