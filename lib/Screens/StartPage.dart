@@ -1,6 +1,5 @@
 import 'package:drive/Screens/Available.dart';
 import 'package:drive/Screens/DetailsCar.dart';
-import 'package:drive/services/Authentication.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -15,24 +14,13 @@ class StartPage extends StatefulWidget {
 
 class _StartPageState extends State<StartPage> {
   final user = FirebaseAuth.instance.currentUser;
-  int _current = 0;
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Theme.of(context).accentColor,
       appBar: AppBar(
-        actions: [
-          IconButton(
-            onPressed: () {
-              Authentication.signOut();
-            },
-            icon: Icon(
-              Icons.settings,
-              color: Colors.brown,
-            ),
-          ),
-        ],
+        actions: [],
         brightness: Brightness.light,
         backgroundColor: Colors.transparent,
         elevation: 0.0,
@@ -284,30 +272,6 @@ class _StartPageState extends State<StartPage> {
             ),
           ],
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.brown[300],
-        currentIndex: _current,
-        onTap: (value) {
-          setState(() {
-            _current = value;
-          });
-        },
-        type: BottomNavigationBarType.fixed,
-        selectedIconTheme: IconThemeData(size: 35),
-        showSelectedLabels: false,
-        unselectedLabelStyle: GoogleFonts.aBeeZee().copyWith(fontSize: 15),
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.calendar_today), label: 'recent'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.notifications), label: 'notifications'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-        ],
       ),
       drawer: user.email == 'kamanzishema@gmail.com' ? Drawer() : null,
     );

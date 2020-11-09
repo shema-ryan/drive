@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:drive/Screens/screens.dart';
+import 'package:drive/model/Api.dart';
 import 'package:drive/model/data.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
@@ -26,10 +28,10 @@ class _BookPageState extends State<BookPage> {
   );
   Future<void> _createPolyLines(Position start, Position destination) async {
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-      'AIzaSyA2m-fUqxVYMKRKXkNBYETgU5uf_YJC5Mg', // Google Maps API Key
+      Api.api, // Google Maps API Key
       PointLatLng(start.latitude, start.longitude),
       PointLatLng(destination.latitude, destination.longitude),
-      travelMode: TravelMode.walking,
+      travelMode: TravelMode.driving,
     );
     if (result.points.isNotEmpty) {
       result.points.forEach((PointLatLng point) {
@@ -89,6 +91,8 @@ class _BookPageState extends State<BookPage> {
         10));
   }
 
+  DateTime _selected;
+  TimeOfDay _selectedTime;
   Future<void> _getCurrentLocation() async {
     Position location = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
@@ -126,6 +130,17 @@ class _BookPageState extends State<BookPage> {
             height: size.height,
             width: size.width,
             child: GoogleMap(
+              polylines: _polyLine,
+              onMapCreated: (GoogleMapController controller) {
+                _googleMapController = controller;
+              },
+              initialCameraPosition:
+                  CameraPosition(target: LatLng(0.0, 0.0), zoom: 18.0),
+              myLocationButtonEnabled: true,
+              zoomControlsEnabled: false,
+              myLocationEnabled: true,
+              zoomGesturesEnabled: true,
+              mapType: MapType.normal,
               markers: {
                 Marker(
                   markerId: MarkerId('start'),
@@ -144,17 +159,6 @@ class _BookPageState extends State<BookPage> {
                       LatLng(_destination.latitude, _destination.longitude),
                 ),
               },
-              polylines: _polyLine,
-              onMapCreated: (GoogleMapController controller) {
-                _googleMapController = controller;
-              },
-              initialCameraPosition:
-                  CameraPosition(target: LatLng(0.0, 0.0), zoom: 18.0),
-              myLocationButtonEnabled: true,
-              zoomControlsEnabled: false,
-              myLocationEnabled: true,
-              zoomGesturesEnabled: true,
-              mapType: MapType.normal,
             ),
           ),
           Container(
@@ -347,7 +351,30 @@ class _BookPageState extends State<BookPage> {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(5.0),
                               ),
-                              onPressed: () {},
+                              onPressed: () {
+                                showDatePicker(
+                                  context: context,
+                                  initialDate: DateTime.now(),
+                                  lastDate: DateTime(DateTime.now().year + 1),
+                                  firstDate: DateTime.now(),
+                                ).then((pickedDate) {
+                                  if (pickedDate == null) {
+                                    return null;
+                                  }
+                                  _selected = pickedDate;
+                                  showTimePicker(
+                                    context: context,
+                                    initialTime: TimeOfDay.now(),
+                                  ).then((value) {
+                                    if (value != null) {
+                                      _selectedTime = value;
+                                      Navigator.of(context)
+                                          .pushReplacementNamed(
+                                              StartPage.routeName);
+                                    }
+                                  });
+                                });
+                              },
                               child: Text(
                                 'Rent',
                                 style: GoogleFonts.aBeeZee().copyWith(

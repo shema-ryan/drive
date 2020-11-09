@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
               if (!FirebaseAuth.instance.currentUser.emailVerified) {
                 return Verification();
               } else {
-                return StartPage();
+                return FirstScreen();
               }
             } else {
               return HomePage();
