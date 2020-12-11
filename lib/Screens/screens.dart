@@ -4,3 +4,6 @@ export 'DetailsCar.dart';
 export 'BookPage.dart';
 export 'Profile.dart';
 export 'FirstScreen.dart';
+export 'Booking_page.dart';
+export 'recent.dart';
+export 'Total_Page.dart';

@@ -42,7 +42,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
           },
           icon: Icon(
             Icons.arrow_back,
-            color: Color(0xFF71482A),
+            color: Theme.of(context).primaryColor,
           ),
         ),
         brightness: Brightness.light,
@@ -52,7 +52,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
         title: Text(
           _selectedCar.brand,
           style: GoogleFonts.aBeeZee()
-              .copyWith(fontSize: 20, color: Color(0xFF71482A)),
+              .copyWith(fontSize: 20, color: Theme.of(context).primaryColor),
         ),
       ),
       body: ListView(
@@ -70,7 +70,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   padding: EdgeInsets.all(5.0),
                   width: size.height * 0.52,
                   decoration: BoxDecoration(
-                    color: Colors.brown[300],
+                    color: Theme.of(context).accentColor,
                     borderRadius: BorderRadius.circular(10.0),
                   ),
                   child: ClipRRect(
@@ -107,7 +107,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
                       width: _current == ind ? 20 : 10,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(5.0),
-                        color: _current == ind ? Colors.brown : Colors.grey,
+                        color: _current == ind
+                            ? Theme.of(context).primaryColor
+                            : Colors.grey,
                       ),
                     );
                   })),
@@ -209,7 +211,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   alignment: Alignment.center,
                   height: size.height * 0.065,
                   width: size.height * 0.171,
-                  child: Text('Book',
+                  child: Text('Select',
                       style: GoogleFonts.aBeeZee().copyWith(
                         fontSize: 18,
                         color: Colors.white,
@@ -218,7 +220,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     borderRadius: BorderRadius.circular(
                       15.0,
                     ),
-                    color: Colors.brown,
+                    color: Theme.of(context).primaryColor,
                   ),
                 ),
               ),
@@ -278,7 +280,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
         width: width,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
-          color: select == _select ? Colors.brown[300] : Colors.white54,
+          color: select == _select
+              ? Theme.of(context).primaryColor
+              : Colors.white54,
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -286,7 +290,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
           children: [
             Text(month,
                 style: GoogleFonts.aBeeZee().copyWith(
-                    fontSize: 18,
+                    fontSize: 14,
                     color: select == _select ? Colors.white : Colors.black54)),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -294,7 +298,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 Text(
                   price,
                   style: GoogleFonts.aBeeZee().copyWith(
-                      fontSize: 25,
+                      fontSize: 20,
                       color: select == _select ? Colors.white : Colors.black54),
                 ),
                 Text('USD',

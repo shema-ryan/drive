@@ -1,7 +1,6 @@
 import 'dart:async';
-import 'package:drive/Screens/screens.dart';
-import 'package:drive/model/Api.dart';
-import 'package:drive/model/data.dart';
+import 'package:drive/Screens/Booking_page.dart';
+import 'package:drive/model/model.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -21,17 +20,31 @@ class _BookPageState extends State<BookPage> {
   List<LatLng> polylineCoordinates = [];
   GoogleMapController _googleMapController;
   Set<Polyline> _polyLine = {};
+  Marker marker;
+
   Position _position = Position(latitude: 0.0, longitude: 0.0);
   final Position _destination = Position(
     latitude: 37.4220,
     longitude: -122.085,
   );
+
+  //function to handler large png on map
+  // Future<Uint8List> getBytesFromAsset() async {
+  //   ByteData data = await rootBundle.load('assets/images/car.png');
+  //   ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
+  //       targetWidth: 50);
+  //   ui.FrameInfo fi = await codec.getNextFrame();
+  //   return (await fi.image.toByteData(format: ui.ImageByteFormat.png))
+  //       .buffer
+  //       .asUint8List();
+  // }
+
   Future<void> _createPolyLines(Position start, Position destination) async {
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
       Api.api, // Google Maps API Key
       PointLatLng(start.latitude, start.longitude),
       PointLatLng(destination.latitude, destination.longitude),
-      travelMode: TravelMode.driving,
+      travelMode: TravelMode.transit,
     );
     if (result.points.isNotEmpty) {
       result.points.forEach((PointLatLng point) {
@@ -59,7 +72,7 @@ class _BookPageState extends State<BookPage> {
     setState(() {
       _polyLine.add(Polyline(
         polylineId: PolylineId('id1'),
-        color: Colors.red,
+        color: Theme.of(context).primaryColor,
         endCap: Cap.roundCap,
         startCap: Cap.buttCap,
         points: polylineCoordinates,
@@ -70,29 +83,6 @@ class _BookPageState extends State<BookPage> {
     });
   }
 
-  void _updateCameraView() {
-    Position _northEastPosition;
-    Position _southWestPosition;
-    if (_position.latitude <= _destination.latitude) {
-      _northEastPosition = _destination;
-      _southWestPosition = _position;
-    } else {
-      _northEastPosition = _position;
-      _southWestPosition = _destination;
-    }
-
-    _googleMapController.animateCamera(CameraUpdate.newLatLngBounds(
-        LatLngBounds(
-          northeast:
-              LatLng(_northEastPosition.latitude, _northEastPosition.longitude),
-          southwest:
-              LatLng(_southWestPosition.latitude, _southWestPosition.longitude),
-        ),
-        10));
-  }
-
-  DateTime _selected;
-  TimeOfDay _selectedTime;
   Future<void> _getCurrentLocation() async {
     Position location = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
@@ -110,8 +100,8 @@ class _BookPageState extends State<BookPage> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(microseconds: 0)).then((value) {
-      _getCurrentLocation();
+    Future.delayed(Duration(microseconds: 0)).then((value) async {
+      await _getCurrentLocation();
     });
   }
 
@@ -130,6 +120,14 @@ class _BookPageState extends State<BookPage> {
             height: size.height,
             width: size.width,
             child: GoogleMap(
+              cameraTargetBounds: CameraTargetBounds(LatLngBounds(
+                northeast: _position.latitude <= _destination.latitude
+                    ? LatLng(_destination.latitude, _destination.longitude)
+                    : LatLng(_position.latitude, _position.longitude),
+                southwest: _position.latitude <= _destination.latitude
+                    ? LatLng(_position.latitude, _position.longitude)
+                    : LatLng(_destination.latitude, _destination.longitude),
+              )),
               polylines: _polyLine,
               onMapCreated: (GoogleMapController controller) {
                 _googleMapController = controller;
@@ -147,14 +145,16 @@ class _BookPageState extends State<BookPage> {
                   infoWindow: InfoWindow(
                       title: 'Here you are.',
                       snippet: 'this look like your current location'),
-                  icon: BitmapDescriptor.defaultMarker,
+                  icon: BitmapDescriptor.defaultMarkerWithHue(
+                      BitmapDescriptor.hueOrange),
                   position: LatLng(_position.latitude, _position.longitude),
                 ),
                 Marker(
                   markerId: MarkerId('dest'),
                   infoWindow: InfoWindow(
                       title: 'Car location', snippet: 'am waiting for you'),
-                  icon: BitmapDescriptor.defaultMarker,
+                  icon: BitmapDescriptor.defaultMarkerWithHue(
+                      BitmapDescriptor.hueAzure),
                   position:
                       LatLng(_destination.latitude, _destination.longitude),
                 ),
@@ -167,64 +167,64 @@ class _BookPageState extends State<BookPage> {
             child: Stack(
               children: [
                 Positioned(
-                  top: 50,
-                  right: 5,
+                  top: size.height * 0.06,
+                  right: size.height * 0.006,
                   child: Column(
                     children: [
                       RawMaterialButton(
-                        fillColor: Colors.brown[100],
+                        fillColor: Theme.of(context).primaryColor,
                         elevation: 2.0,
                         shape: CircleBorder(),
                         onPressed: () {
                           _googleMapController
                               .animateCamera(CameraUpdate.zoomIn());
+                          print(marker);
                         },
                         child: Icon(Icons.add),
                       ),
                       RawMaterialButton(
-                        fillColor: Colors.brown[100],
+                        fillColor: Theme.of(context).primaryColor,
                         elevation: 2.0,
                         shape: CircleBorder(),
-                        onPressed: () {
-                          print('this are the polyines :$_polyLine');
+                        onPressed: () async {
                           _googleMapController
                               .animateCamera(CameraUpdate.zoomOut());
                         },
                         child: Icon(Icons.remove),
                       ),
                       SizedBox(
-                        height: 10,
+                        height: size.height * 0.013,
                       ),
                     ],
                   ),
                 ),
                 Positioned(
-                  top: 20,
-                  left: 10,
+                  top: size.height * 0.026,
+                  left: size.height * 0.013,
                   child: IconButton(
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    color: Colors.brown,
+                    color: Theme.of(context).primaryColor,
                     icon: Icon(Icons.arrow_back_rounded),
                   ),
                 ),
                 Positioned(
-                  top: 35,
-                  right: 100,
+                  top: size.height * 0.046,
+                  right: size.height * 0.13,
                   child: Text('Distance : ' + total.toStringAsFixed(3) + 'km'),
                 ),
                 Positioned(
                   bottom: 0,
                   child: Container(
                     padding: const EdgeInsets.all(8.0),
-                    height: 220,
+                    height: size.height * 0.29,
                     width: size.width,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.only(
                           topRight: Radius.circular(20.0),
                           topLeft: Radius.circular(20.0)),
-                      color: Colors.brown[300],
+                      color: Theme.of(context).primaryColor.withOpacity(0.8),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -248,12 +248,12 @@ class _BookPageState extends State<BookPage> {
                               ],
                             ),
                             SizedBox(
-                              width: 10,
+                              width: size.height * 0.013,
                             ),
                           ],
                         ),
                         SizedBox(
-                          height: size.height * 0.056,
+                          height: size.height * 0.046,
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -309,7 +309,7 @@ class _BookPageState extends State<BookPage> {
                           ],
                         ),
                         SizedBox(
-                          height: 20,
+                          height: size.height * 0.026,
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -347,36 +347,17 @@ class _BookPageState extends State<BookPage> {
                               ],
                             ),
                             RaisedButton(
-                              color: Colors.brown,
+                              color: Theme.of(context).primaryColor,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(5.0),
                               ),
                               onPressed: () {
-                                showDatePicker(
-                                  context: context,
-                                  initialDate: DateTime.now(),
-                                  lastDate: DateTime(DateTime.now().year + 1),
-                                  firstDate: DateTime.now(),
-                                ).then((pickedDate) {
-                                  if (pickedDate == null) {
-                                    return null;
-                                  }
-                                  _selected = pickedDate;
-                                  showTimePicker(
-                                    context: context,
-                                    initialTime: TimeOfDay.now(),
-                                  ).then((value) {
-                                    if (value != null) {
-                                      _selectedTime = value;
-                                      Navigator.of(context)
-                                          .pushReplacementNamed(
-                                              StartPage.routeName);
-                                    }
-                                  });
-                                });
+                                Navigator.of(context).pushNamed(
+                                    BookingPage.routeName,
+                                    arguments: _selectedCar);
                               },
                               child: Text(
-                                'Rent',
+                                'Book',
                                 style: GoogleFonts.aBeeZee().copyWith(
                                     fontSize: 15, color: Colors.white70),
                               ),
@@ -389,7 +370,7 @@ class _BookPageState extends State<BookPage> {
                 ),
                 Positioned(
                   right: 1,
-                  bottom: 150,
+                  bottom: size.height * 0.20,
                   child: Image.asset(
                     _selectedCar.images[0],
                     height: size.height * 0.16,

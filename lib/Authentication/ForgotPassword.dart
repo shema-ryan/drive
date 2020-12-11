@@ -14,7 +14,7 @@ class ForgetPassword extends StatelessWidget {
       body: Form(
         key: _formKey,
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: EdgeInsets.all(size.width * 0.02035),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -26,18 +26,22 @@ class ForgetPassword extends StatelessWidget {
                     text: TextSpan(children: [
                       TextSpan(
                         text: 'Ooops! ',
-                        style: TextStyle(fontSize: 18, color: Colors.black54),
+                        style: TextStyle(
+                            fontSize: size.width * 0.04580,
+                            color: Colors.black54),
                       ),
                       TextSpan(
                           text: ' Forgot password ',
                           style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.brown,
+                              fontSize: size.width * 0.0508,
+                              color: Theme.of(context).primaryColor,
                               fontWeight: FontWeight.bold,
                               fontStyle: FontStyle.italic)),
                       TextSpan(
                         text: ' Easily Recover ',
-                        style: TextStyle(fontSize: 18, color: Colors.black54),
+                        style: TextStyle(
+                            fontSize: size.width * 0.0458,
+                            color: Colors.black54),
                       ),
                     ]),
                   ),
@@ -110,13 +114,13 @@ class ForgetPassword extends StatelessWidget {
                               borderRadius: BorderRadius.circular(5),
                               border: Border.all(
                                 width: 1,
-                                color: Colors.brown,
+                                color: Theme.of(context).primaryColor,
                               )),
                           child: Text(
                             'Reset',
                             style: TextStyle(
                                 fontSize: 19,
-                                color: Colors.brown,
+                                color: Theme.of(context).primaryColor,
                                 fontWeight: FontWeight.bold),
                           ),
                         ),

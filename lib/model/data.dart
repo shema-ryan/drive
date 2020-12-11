@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 class Car {
   String brand;
   String model;
@@ -29,8 +31,8 @@ class Dealer {
   Dealer({this.name, this.offers, this.image});
 }
 
-class Data {
-  static List<Car> getCarList = [
+class Data extends ChangeNotifier {
+  final List<Car> _getCarList = [
     Car(
       brand: "Land Rover",
       model: "Discovery",
@@ -179,6 +181,16 @@ class Data {
       seat: 4,
     ),
   ];
+
+  List<Car> get listCars {
+    return [..._getCarList];
+  }
+
+  void addCar(Car car) {
+    _getCarList.add(car);
+    notifyListeners();
+  }
+
   static List<Dealer> getDealerList = [
     Dealer(
       name: "Hertz",

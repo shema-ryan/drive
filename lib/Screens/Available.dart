@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../model/model.dart';
+import 'package:provider/provider.dart';
 
 class AvailableCars extends StatelessWidget {
   static const String routeName = '/Available';
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
+    final List<Car> _loaded = Provider.of<Data>(context).listCars;
     return Scaffold(
       backgroundColor: Theme.of(context).accentColor,
       appBar: AppBar(
@@ -16,7 +18,7 @@ class AvailableCars extends StatelessWidget {
           },
           icon: Icon(
             Icons.arrow_back,
-            color: Color(0xFF71482A),
+            color: Theme.of(context).primaryColor,
           ),
         ),
         brightness: Brightness.light,
@@ -26,12 +28,12 @@ class AvailableCars extends StatelessWidget {
         title: Text(
           'Available Cars',
           style: GoogleFonts.aBeeZee()
-              .copyWith(fontSize: 20, color: Color(0xFF71482A)),
+              .copyWith(fontSize: 20, color: Theme.of(context).primaryColor),
         ),
       ),
       body: ListView.builder(
         padding: EdgeInsets.symmetric(horizontal: 8.0),
-        itemCount: Data.getCarList.length,
+        itemCount: _loaded.length,
         itemBuilder: (BuildContext context, int index) {
           return Stack(
             children: [
@@ -40,7 +42,7 @@ class AvailableCars extends StatelessWidget {
                   margin: EdgeInsets.symmetric(vertical: 20),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10.0),
-                    color: Color(0xFFDE925C),
+                    color: Theme.of(context).primaryColor,
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -50,12 +52,12 @@ class AvailableCars extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
-                            '\$' + '${Data.getCarList[index].price}',
+                            '\$' + '${_loaded[index].price}',
                             style: GoogleFonts.aBeeZee()
                                 .copyWith(fontSize: 20, color: Colors.black),
                           ),
                           Text(
-                            'price /' + Data.getCarList[index].condition,
+                            'price /' + _loaded[index].condition,
                             style: GoogleFonts.aBeeZee()
                                 .copyWith(fontSize: 15, color: Colors.white70),
                           ),
@@ -72,7 +74,7 @@ class AvailableCars extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Text(
-                                Data.getCarList[index].brand,
+                                _loaded[index].brand,
                                 style: GoogleFonts.aBeeZee().copyWith(
                                     fontSize: 20, color: Colors.white),
                               ),
@@ -88,7 +90,7 @@ class AvailableCars extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Text(
-                                Data.getCarList[index].model,
+                                _loaded[index].model,
                                 style: GoogleFonts.aBeeZee().copyWith(
                                     fontSize: 20, color: Colors.white),
                               ),
@@ -104,8 +106,7 @@ class AvailableCars extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Text(
-                                Data.getCarList[index].fuelConsumption ??
-                                    'shem',
+                                _loaded[index].fuelConsumption ?? 'shem',
                                 style: GoogleFonts.aBeeZee().copyWith(
                                     fontSize: 20, color: Colors.white),
                               ),
@@ -124,7 +125,7 @@ class AvailableCars extends StatelessWidget {
                 right: 10,
                 top: -5,
                 child: Image.asset(
-                  Data.getCarList[index].images[0],
+                  _loaded[index].images[0],
                   height: size.height * 0.13,
                   fit: BoxFit.contain,
                 ),

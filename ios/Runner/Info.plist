@@ -14,6 +14,12 @@
 	<string>drive</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+    <string> Drive need access</string>
+    <key>NSCameraUsageDescription</key>
+    <string> Drive need access</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string> Drive need access</string>
 	<key>CFBundleShortVersionString</key>
 	<string>$(FLUTTER_BUILD_NAME)</string>
 	<key>CFBundleSignature</key>

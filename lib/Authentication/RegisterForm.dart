@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import './ForgotPassword.dart';
 import 'package:drive/services/services.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
 
 class HomePage extends StatefulWidget {
   static const String routeName = '/HomePage';
@@ -20,6 +22,8 @@ class _HomePageState extends State<HomePage>
   String phoneNumber = '';
   String captureCode = '';
   String email = '';
+  String imageUrl = '';
+  File image;
   bool _loadingSpinner = false;
   bool loading = false;
   bool _visibility = true;
@@ -47,7 +51,7 @@ class _HomePageState extends State<HomePage>
           });
           String message = '';
           if (e.contains('The password is invalid')) {
-            message = 'the password is incorrect';
+            message = 'password is incorrect';
           } else if (e.contains('may have been deleted.')) {
             message = 'No account detected consider creating one ';
           } else if (e.contains('A network error')) {
@@ -61,7 +65,7 @@ class _HomePageState extends State<HomePage>
           ));
         });
       } else {
-        if (_chx) {
+        if (_chx && image != null) {
           setState(() {
             _loadingSpinner = true;
           });
@@ -70,34 +74,13 @@ class _HomePageState extends State<HomePage>
             email: email,
             username: name,
             phoneNumber: telephone,
-          ).then((value) {
-            showDialog(
-              context: context,
-              builder: (context) => AlertDialog(
-                content: Text('a message was sent to your mail please verify '),
-                actions: [
-                  FlatButton(
-                    child: Text('okay'),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  )
-                ],
-              ),
-            );
-          }).catchError((e) {
-            setState(() {
-              _loadingSpinner = false;
-            });
-            _scaffold.currentState.showSnackBar(SnackBar(
-              backgroundColor: Theme.of(context).errorColor,
-              content: Text(e),
-            ));
-          });
+            file: image,
+          );
         } else {
           _scaffold.currentState.showSnackBar(SnackBar(
             backgroundColor: Theme.of(context).errorColor,
-            content: Text('please accept terms and conditions'),
+            content: Text(
+                'please accept terms and conditions and provide a profile picture'),
             action: SnackBarAction(
               label: 'Ok',
               onPressed: () {
@@ -108,6 +91,14 @@ class _HomePageState extends State<HomePage>
         }
       }
     }
+  }
+
+  Future<void> _pickImageAndStore() async {
+    ImagePicker _pick = ImagePicker();
+    final pickedImage = await _pick.getImage(source: ImageSource.camera);
+    setState(() {
+      image = File(pickedImage.path);
+    });
   }
 
   @override
@@ -141,11 +132,11 @@ class _HomePageState extends State<HomePage>
               width: size.width,
               decoration: BoxDecoration(
                   image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: NetworkImage(
-                          'https://www.turbinebd.com/wp-content/uploads/2020/01/ooo-1.jpg'))),
+                fit: BoxFit.cover,
+                image: AssetImage('assets/images/open.jpg'),
+              )),
               child: DecoratedBox(
-                decoration: BoxDecoration(color: Colors.brown.withOpacity(0.7)),
+                decoration: BoxDecoration(color: Colors.brown.withOpacity(0.4)),
               ),
             ),
             ListView(
@@ -157,7 +148,7 @@ class _HomePageState extends State<HomePage>
                   child: RichText(
                     text: TextSpan(children: [
                       TextSpan(
-                          text: 'Welcome To ',
+                          text: 'Welcome To',
                           style: TextStyle(
                             fontSize: 20,
                           )),
@@ -176,21 +167,38 @@ class _HomePageState extends State<HomePage>
                   ),
                 ),
                 SizedBox(
-                  height: size.height * 0.13,
+                  height: size.height * 0.10,
                 ),
                 AnimatedContainer(
                   duration: Duration(seconds: 1),
-                  height: _signState ? size.height * 0.62 : size.height * 0.4,
+                  height: _signState ? size.height * 0.65 : size.height * 0.39,
                   child: Card(
                     color: Colors.white54,
                     margin: const EdgeInsets.all(8.0),
                     child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8.0, vertical: 5.0),
                       child: SingleChildScrollView(
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          crossAxisAlignment: CrossAxisAlignment.end,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
+                            if (_signState)
+                              CircleAvatar(
+                                radius: 60,
+                                backgroundColor: Theme.of(context).primaryColor,
+                                backgroundImage:
+                                    image == null ? null : FileImage(image),
+                                child: image != null
+                                    ? null
+                                    : IconButton(
+                                        onPressed: _pickImageAndStore,
+                                        icon: Icon(
+                                          Icons.add_a_photo_outlined,
+                                          color: Theme.of(context).accentColor,
+                                        ),
+                                      ),
+                              ),
                             if (_signState)
                               FadeTransition(
                                 opacity: _animation,
@@ -311,22 +319,31 @@ class _HomePageState extends State<HomePage>
                               ],
                             ),
                             if (!_signState)
-                              FlatButton(
-                                  onPressed: () {
-                                    Navigator.of(context)
-                                        .pushNamed(ForgetPassword.routeName);
-                                  },
-                                  child: Text(
-                                    'forgot password ?',
-                                    style: TextStyle(color: Colors.black45),
-                                  )),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  FlatButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pushNamed(
+                                            ForgetPassword.routeName);
+                                      },
+                                      child: Text(
+                                        'forgot password ?',
+                                        style: TextStyle(color: Colors.black45),
+                                      )),
+                                ],
+                              ),
                             if (_signState)
                               SizedBox(
                                 height: size.height * 0.03,
                               ),
                             _loadingSpinner
                                 ? Center(
-                                    child: CircularProgressIndicator(),
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                          Theme.of(context).primaryColor),
+                                    ),
                                   )
                                 : Row(
                                     mainAxisAlignment:
@@ -347,20 +364,22 @@ class _HomePageState extends State<HomePage>
                                         child: Container(
                                           alignment: Alignment.center,
                                           margin: EdgeInsets.all(5),
-                                          height: size.height * 0.07,
+                                          height: size.height * 0.055,
                                           width: size.width * 0.4,
                                           decoration: BoxDecoration(
                                               color: Colors.transparent,
                                               borderRadius:
                                                   BorderRadius.circular(5),
                                               border: Border.all(
-                                                  color: Colors.brown,
+                                                  color: Theme.of(context)
+                                                      .primaryColor,
                                                   style: BorderStyle.solid)),
                                           child: Text(
                                             !_signState ? 'LogIn' : 'SignUp',
                                             style: TextStyle(
-                                                color: Colors.brown,
-                                                fontSize: 15,
+                                                color: Theme.of(context)
+                                                    .primaryColor,
+                                                fontSize: 16,
                                                 fontWeight: FontWeight.bold),
                                           ),
                                         ),
@@ -370,16 +389,14 @@ class _HomePageState extends State<HomePage>
                                         child: Container(
                                           alignment: Alignment.center,
                                           margin: EdgeInsets.all(5),
-                                          height: size.height * 0.07,
+                                          height: size.height * 0.055,
                                           width: size.width * 0.4,
                                           decoration: BoxDecoration(
-                                              color: Theme.of(context)
-                                                  .primaryColor,
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
-                                              border: Border.all(
-                                                color: Colors.white54,
-                                              )),
+                                            color:
+                                                Theme.of(context).primaryColor,
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                          ),
                                           child: Text(
                                             'Use Google',
                                             style: TextStyle(
@@ -404,7 +421,8 @@ class _HomePageState extends State<HomePage>
                                         });
                                       },
                                       value: _chx,
-                                      checkColor: Colors.brown,
+                                      checkColor:
+                                          Theme.of(context).primaryColor,
                                     ),
                                     Text(
                                       'i agree to Terms and conditions ',
@@ -438,7 +456,10 @@ class _HomePageState extends State<HomePage>
                                     },
                                     child: Text(
                                       _signState ? 'Sign In' : 'Sign Up',
-                                      style: TextStyle(fontSize: 14),
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          color:
+                                              Theme.of(context).primaryColor),
                                     ),
                                   ),
                                 ],
