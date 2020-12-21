@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -5,13 +6,28 @@ import 'package:firebase_core/firebase_core.dart';
 import './Authentication/authentication.dart';
 import './Screens/screens.dart';
 import 'package:provider/provider.dart';
-
+import 'package:geolocator/geolocator.dart';
 import 'model/model.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(MyApp());
+  bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+  LocationPermission _permission = await Geolocator.checkPermission();
+  if (!serviceEnabled) {
+    serviceEnabled = await Geolocator.openLocationSettings();
+  } else {
+    if (_permission == LocationPermission.denied) {
+      _permission = await Geolocator.requestPermission();
+    }
+  }
+
+  if (_permission == LocationPermission.always ||
+      _permission == LocationPermission.whileInUse) {
+    runApp(MyApp());
+  } else {
+    exit(0);
+  }
 }
 
 // Color(0xfff3f2f7),
